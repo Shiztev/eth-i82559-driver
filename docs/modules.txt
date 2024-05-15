@@ -1,0 +1,35 @@
+PCI
+-------------------------------
+The PCI module provides an interface to the PCI address and configuration space.
+
+The __pci_init() function should be used on kernel initialization to scan the
+pci configuration space and call any necessary initialization functions for any
+other modules that require to be initialized. __pci_init() must be directly
+modified to initialize any new modules added to the kernel, and does not
+automatically detect and initialize new or changed modules.
+
+The PCI interface uses struct pci_device to relay pci address information to
+modules that are being initialized. This information can be used via the exposed
+pci read functions to fetch necessary fields from the pci configuration space,
+such as MMIO or Port I/O BARs, class codes, etc.
+
+
+ETH0
+-------------------------------
+The ETH0 module constitutes a driver for Intel's i82559 Ethernet controller.
+
+The module must first be initialized via __eth_init(), which is called in
+__pci_init(). This verifies that a detected device that appears to fit into
+the i8255x family is an i82559 NIC. Additionally, this verifies additional
+information (such as class code, revision ID, etc.), and fetches the BAR to
+interact with the NIC. If any verification information (class code, etc.) is not
+valid, or no valid BAR is specified, __eth_init() panics.
+__eth_init() then configures the device and inserts an ISR into the IDT. If
+configuration fails (for example, do to a hardware fault by the NIC),
+__eth_init() panics.
+
+The module also supports both MMIO and Port I/O, depending on what is supported
+by the system.
+
+The module primary exposed functionality resides in __eth_transmit(), which
+transmits a provided byte buffer to the broadcast MAC address.

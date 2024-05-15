@@ -1,0 +1,147 @@
+TRSMT(2)
+
+NAME
+	trsmt - transmit data in an ethernet frame
+
+SYNOPSIS
+	uint32_t trsmt(uint8_t *data, uint32_t size);
+
+DESCRIPTION
+	transmits byte buffer data of specified size via ethernet
+	addressed to the broadcast MAC address. size must be less than
+	MAX_DATA_SIZE.
+
+RETURN VALUE
+	always returns 0.
+
+
+STP(2)
+
+NAME
+	stp - broadacst a bogus STP frame over ethernet
+
+SYNOPSIS
+	uint32_t stp(void);
+
+DESCRIPTION
+	broadcasts an STP frame containing arbitrary data via ethernet.
+
+RETURN VALUE
+	always returns 0.
+
+
+ETH_READ_U32(4)
+
+NAME
+	__eth_read_u32 - read a uint32_t from the NIC
+
+SYNOPSIS
+	uint32_t __eth_read_u32(uint16_t reg);
+
+DESCRIPTION
+	reads a uint32_t from the NIC at the specified register offset
+	from the CSR base address.
+
+RETURN VALUE
+	value stored in the designated register.
+
+
+ETH_READ_U16(4)
+
+NAME
+	__eth_read_u16 - read a uint16_t from the NIC
+
+SYNOPSIS
+	uint16_t __eth_read_u16(uint16_t reg);
+
+DESCRIPTION
+	reads a uint16_t from the NIC at the specified register offset
+	from the CSR base address.
+
+RETURN VALUE
+	value stored in the designated register.
+
+
+ETH_WRITE_U32(4)
+
+NAME
+	__eth_write_u32 - write a uint32_t to the NIC
+
+SYNOPSIS
+	void __eth_write_u32(uint16_t reg, uint32_t value);
+
+DESCRIPTION
+	writes the provided uint32_t value to the specified register offset
+	from the CSR base address on the NIC.
+
+RETURN VALUE
+	none.
+
+
+ETH_WRITE_U16(4)
+
+NAME
+	__eth_write_u16 - write a uint16_t to the NIC
+
+SYNOPSIS
+	void __eth_write_u16(uint16_t reg, uint16_t value);
+
+DESCRIPTION
+	writes the provided uint16_t value to the specified register offset
+	from the CSR base address on the NIC.
+
+RETURN VALUE
+	none.
+
+
+ETH_INIT(4)
+
+NAME
+	__eth_init - initialize the driver for the i82559 controller
+
+SYNOPSIS
+	void __eth_init(struct pci_device *pci_info);
+
+DESCRIPTION
+	configures and sets up the driver for the NIC, with respect to
+	the provided pci information from pci_device. this function
+	must be called before any other function within the ethernet
+	api.
+	this will panic if called for an unknown or unsupported device.
+
+RETURN VALUE
+	none.
+
+
+ETH_ISR(4)
+
+NAME
+	__eth_isr - interrupt handler for i8255x interrupts
+
+SYNOPSIS
+	void __eth_isr(int vector, int vode);
+
+DESCRIPTION
+	this serves as the overarching interrupt service routine for
+	interrupts triggered by the i8255x. this is automatically
+	installed into the IDT during an __eth_init() call.
+
+RETURN VALUE
+	none.
+
+
+ETH_TRANSMIT(4)
+
+NAME
+	__eth_transmit - transmit provided data to broadcast address
+
+SYNOPSIS
+	void __eth_transmit(uint8_t *data, uint16_t size);
+
+DESCRIPTION
+	transmits byte buffer data of specified size in an ethernet
+	frame to the broadcast MAC address. size must be less than
+	MAX_DATA_SIZE.
+
+RETURN VALUE
+	none.
